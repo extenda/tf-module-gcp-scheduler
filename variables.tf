@@ -5,12 +5,13 @@ variable create_job {
 }
 
 variable project_id {
-  description = "Project ID where the secrets are stored"
   type        = string
+  description = "Project ID where the jobs will be created"
 }
 
  variable region {
    type    = string
+   description = "Region where the scheduler job resides. If it is not provided, Terraform will use the provider default"
    default = "europe-west1"
  }
 
