@@ -34,7 +34,7 @@ resource "google_cloud_scheduler_job" "job" {
       body        = lookup(var.scheduled_jobs[count.index], "body", "")
 
    dynamic "oauth_token" {
-      for_each = (lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "") != "") ? [true] : []
+      for_each = (lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oauth_service_account_email] : []
       content {
         service_account_email = lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "")
         scope                 = lookup(var.scheduled_jobs[count.index], "scope", "https://www.googleapis.com/auth/cloud-platform")
@@ -42,7 +42,7 @@ resource "google_cloud_scheduler_job" "job" {
     }
 
     dynamic "oidc_token" {
-      for_each = (lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "") != "") ? [true] : []
+      for_each = (lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oidc_service_account_email] : []
       content {
         service_account_email = lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "")
         audience              = lookup(var.scheduled_jobs[count.index], "audience", "")
