@@ -5,23 +5,22 @@ resource "google_cloud_scheduler_job" "job" {
   name             = var.scheduled_jobs[count.index].name
   project          = var.project_id
   region           = var.region
-  description      = lookup(var.scheduled_jobs[count.index], "job_description", null,)
-  schedule         = lookup(var.scheduled_jobs[count.index], "job_schedule", null,)
-  time_zone        = lookup(var.scheduled_jobs[count.index], "time_zone", null,)
-  attempt_deadline = lookup(var.scheduled_jobs[count.index], "attempt_deadline", "320s",)
+  description      = lookup(var.scheduled_jobs[count.index], "job_description", null)
+  schedule         = lookup(var.scheduled_jobs[count.index], "job_schedule", null)
+  time_zone        = lookup(var.scheduled_jobs[count.index], "time_zone", null)
+  attempt_deadline = lookup(var.scheduled_jobs[count.index], "attempt_deadline", null)
 
    dynamic "pubsub_target" {
     for_each = (lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "") != "") ? [var.scheduled_jobs[count.index].pubsub_topic_name] : []
     content {
       topic_name = lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "")
       data       = lookup(var.scheduled_jobs[count.index], "data", "")
-    }
   }
-
+}
   dynamic "retry_config" {
     for_each = (lookup(var.scheduled_jobs[count.index], "retry_count", "") != "") ? [var.scheduled_jobs[count.index].retry_count] : []
     content {
-      retry_count          = lookup(var.scheduled_jobs[count.index], "retry_count", "1")
+      retry_count          = lookup(var.scheduled_jobs[count.index], "retry_count", "")
       max_retry_duration   = lookup(var.scheduled_jobs[count.index], "max_retry_duration", "")
     }
   }

@@ -9,10 +9,10 @@ variable project_id {
   type        = string
 }
 
-variable region {
-  type    = string
-  default = "europe-west-1"
-}
+ variable region {
+   type    = string
+   default = "europe-west1"
+ }
 
 variable scheduled_jobs {
   type        = list(map(string))
