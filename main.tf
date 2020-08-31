@@ -1,3 +1,7 @@
+resource "google_app_engine_application" "app" {
+  project     = var.project_id
+  location_id = var.region
+}
 
 resource "google_cloud_scheduler_job" "job" {
   count = var.create_job ? length(var.scheduled_jobs) : 0
