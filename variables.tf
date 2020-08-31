@@ -12,7 +12,7 @@ variable project_id {
  variable region {
    type    = string
    description = "Region where the scheduler job resides. If it is not provided, Terraform will use the provider default"
-   default = "europe-west1"
+   default     = "europe-west"
  }
 
 variable scheduled_jobs {
