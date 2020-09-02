@@ -65,6 +65,7 @@ scheduled_jobs = [
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
+| app_engine_region | Region to serve the app from | `string` | `europe-west` | no |
 | create\_job | Specify true if you want to create a job | `bool` | `true` | no |
 | project\_id | Project ID where the jobs will be created | `string` | n/a | yes |
 | region | Region where the scheduler job resides. If it is not provided, Terraform will use the provider default | `string` | `europe-west1` | no |
