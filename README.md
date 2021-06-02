@@ -12,6 +12,8 @@ The variable *`scheduled_jobs`* supports the following arguments:
 - `attempt_deadline`: The deadline for job attempts. If the request handler does not respond by this deadline then the request is cancelled and the attempt is marked as a DEADLINE_EXCEEDED failure. The failed attempt can be viewed in execution logs. Cloud Scheduler will retry the job according to the RetryConfig. The allowed duration for this deadline is:
   For HTTP targets, between 15 seconds and 30 minutes.
   For App Engine HTTP targets, between 15 seconds and 24 hours. A duration in seconds with up to nine fractional digits, terminated by 's'. Example: "3.5s"
+- `min_backoff_duration`: The minimum amount of time to wait before retrying a job after it fails
+- `max_backoff_duration`: The maximum amount of time to wait before retrying a job after it fails
 
 By default, if a job does not complete successfully, meaning that an acknowledgement is not received from the handler, then it will be retried with exponential backoff according to the settings Structure is documented below.
 - `retry_count`: The number of attempts that the system will make to run a job using the exponential backoff procedure described by maxDoublings. Values greater than 5 and negative values are not allowed.

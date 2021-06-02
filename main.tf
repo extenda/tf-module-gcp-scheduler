@@ -14,43 +14,45 @@ resource "google_cloud_scheduler_job" "job" {
   time_zone        = lookup(var.scheduled_jobs[count.index], "time_zone", null)
   attempt_deadline = lookup(var.scheduled_jobs[count.index], "attempt_deadline", null)
 
-   dynamic "pubsub_target" {
+  dynamic "pubsub_target" {
     for_each = (lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "") != "") ? [var.scheduled_jobs[count.index].pubsub_topic_name] : []
     content {
       topic_name = lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "")
       data       = lookup(var.scheduled_jobs[count.index], "data", "")
+    }
   }
-}
   dynamic "retry_config" {
     for_each = (lookup(var.scheduled_jobs[count.index], "retry_count", "") != "") ? [var.scheduled_jobs[count.index].retry_count] : []
     content {
       retry_count          = lookup(var.scheduled_jobs[count.index], "retry_count", "")
       max_retry_duration   = lookup(var.scheduled_jobs[count.index], "max_retry_duration", "")
+      min_backoff_duration = lookup(var.scheduled_jobs[count.index], "min_backoff_duration", "")
+      max_backoff_duration = lookup(var.scheduled_jobs[count.index], "max_backoff_duration", "")
     }
   }
 
-  dynamic "http_target"  {
+  dynamic "http_target" {
     for_each = (lookup(var.scheduled_jobs[count.index], "uri", "") != "") ? [var.scheduled_jobs[count.index].uri] : []
     content {
       http_method = lookup(var.scheduled_jobs[count.index], "http_method", "")
       uri         = lookup(var.scheduled_jobs[count.index], "uri", "")
       body        = lookup(var.scheduled_jobs[count.index], "body", "")
 
-   dynamic "oauth_token" {
-      for_each = (lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oauth_service_account_email] : []
-      content {
-        service_account_email = lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "")
-        scope                 = lookup(var.scheduled_jobs[count.index], "scope", "https://www.googleapis.com/auth/cloud-platform")
+      dynamic "oauth_token" {
+        for_each = (lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oauth_service_account_email] : []
+        content {
+          service_account_email = lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "")
+          scope                 = lookup(var.scheduled_jobs[count.index], "scope", "https://www.googleapis.com/auth/cloud-platform")
+        }
       }
-    }
 
-    dynamic "oidc_token" {
-      for_each = (lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oidc_service_account_email] : []
-      content {
-        service_account_email = lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "")
-        audience              = lookup(var.scheduled_jobs[count.index], "audience", "")
+      dynamic "oidc_token" {
+        for_each = (lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oidc_service_account_email] : []
+        content {
+          service_account_email = lookup(var.scheduled_jobs[count.index], "oidc_service_account_email", "")
+          audience              = lookup(var.scheduled_jobs[count.index], "audience", "")
+        }
       }
     }
-   }
   }
 }
