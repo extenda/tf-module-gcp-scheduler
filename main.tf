@@ -26,10 +26,10 @@ resource "google_cloud_scheduler_job" "job" {
     for_each = (lookup(var.scheduled_jobs[count.index], "retry_count", "") != "") ? [var.scheduled_jobs[count.index].retry_count] : []
     content {
       retry_count          = lookup(var.scheduled_jobs[count.index], "retry_count", "")
-      max_retry_duration   = lookup(var.scheduled_jobs[count.index], "max_retry_duration", "")
-      min_backoff_duration = lookup(var.scheduled_jobs[count.index], "min_backoff_duration", "")
-      max_backoff_duration = lookup(var.scheduled_jobs[count.index], "max_backoff_duration", "")
-      max_doublings        = lookup(var.scheduled_jobs[count.index], "max_doublings", "")
+      max_retry_duration   = lookup(var.scheduled_jobs[count.index], "max_retry_duration", null)
+      min_backoff_duration = lookup(var.scheduled_jobs[count.index], "min_backoff_duration", null)
+      max_backoff_duration = lookup(var.scheduled_jobs[count.index], "max_backoff_duration", null)
+      max_doublings        = lookup(var.scheduled_jobs[count.index], "max_doublings", null)
     }
   }
 
