@@ -16,7 +16,7 @@ variable region {
 }
 
 variable scheduled_jobs {
-  type        = list(map(string))
+  type        = any
   description = "The list of the jobs to be created"
   default     = []
 }

@@ -18,7 +18,8 @@ resource "google_cloud_scheduler_job" "job" {
     for_each = (lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "") != "") ? [var.scheduled_jobs[count.index].pubsub_topic_name] : []
     content {
       topic_name = lookup(var.scheduled_jobs[count.index], "pubsub_topic_name", "")
-      data       = lookup(var.scheduled_jobs[count.index], "data", "")
+      data       = lookup(var.scheduled_jobs[count.index], "data", null)
+      attributes = lookup(var.scheduled_jobs[count.index], "attributes", null)
     }
   }
   dynamic "retry_config" {
@@ -28,6 +29,7 @@ resource "google_cloud_scheduler_job" "job" {
       max_retry_duration   = lookup(var.scheduled_jobs[count.index], "max_retry_duration", "")
       min_backoff_duration = lookup(var.scheduled_jobs[count.index], "min_backoff_duration", "")
       max_backoff_duration = lookup(var.scheduled_jobs[count.index], "max_backoff_duration", "")
+      max_doublings        = lookup(var.scheduled_jobs[count.index], "max_doublings", "")
     }
   }
 
@@ -37,6 +39,7 @@ resource "google_cloud_scheduler_job" "job" {
       http_method = lookup(var.scheduled_jobs[count.index], "http_method", "")
       uri         = lookup(var.scheduled_jobs[count.index], "uri", "")
       body        = lookup(var.scheduled_jobs[count.index], "body", "")
+      headers     = lookup(var.scheduled_jobs[count.index], "headers", null)
 
       dynamic "oauth_token" {
         for_each = (lookup(var.scheduled_jobs[count.index], "oauth_service_account_email", "") != "") ? [var.scheduled_jobs[count.index].oauth_service_account_email] : []
