@@ -14,15 +14,15 @@ resource "google_cloud_scheduler_job" "job" {
   name             = each.value.name
   project          = var.project_id
   region           = var.region
-  description      = try(each.value.job_description, null)
-  schedule         = try(each.value.job_schedule, null)
+  description      = try(each.value.description, null)
+  schedule         = try(each.value.schedule, null)
   time_zone        = try(each.value.time_zone, null)
   attempt_deadline = try(each.value.attempt_deadline, null)
 
   dynamic "pubsub_target" {
     for_each = lookup(each.value, "pubsub_target", null) != null ? [each.value.pubsub_target] : []
     content {
-      topic_name = try(pubsub_target.value.pubsub_topic_name, "")
+      topic_name = try(pubsub_target.value.topic_name, "")
       data       = try(pubsub_target.value.data, null)
       attributes = try(pubsub_target.value.attributes, null)
     }
