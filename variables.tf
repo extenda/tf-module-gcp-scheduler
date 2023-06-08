@@ -1,9 +1,3 @@
-variable create_job {
-  type        = bool
-  description = "Specify true if you want to create a job"
-  default     = true
-}
-
 variable project_id {
   type        = string
   description = "Project ID where the jobs will be created"
@@ -16,11 +10,47 @@ variable region {
 }
 
 variable scheduled_jobs {
-  type        = any
+  type = list(object(
+    {
+      name             = string
+      description      = optional(string)
+      schedule         = optional(string)
+      time_zone        = optional(string)
+      attempt_deadline = optional(string)
+
+      pubsub_target = optional(object({
+        topic_name = optional(string)
+        data       = optional(string)
+        attributes = optional(string)
+      }))
+
+      retry_config = optional(object({
+        retry_count          = optional(number)
+        max_retry_duration   = optional(string)
+        min_backoff_duration = optional(string)
+        max_backoff_duration = optional(string)
+        max_doublings        = optional(number)
+      }))
+
+      http_target = optional(object({
+        http_method = optional(string)
+        uri         = optional(string)
+        body        = optional(string)
+        headers     = optional(map(string))
+        oauth_token = optional(object({
+          service_account_email = optional(string)
+          scope                 = optional(string)
+        }))
+        oidc_token = optional(object({
+          service_account_email = optional(string)
+          audience              = optional(string)
+        }))
+      }))
+
+    }))
   description = "The list of the jobs to be created"
   default     = []
 }
-
 
 variable app_engine_region {
   type        = string
