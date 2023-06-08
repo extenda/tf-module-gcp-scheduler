@@ -21,7 +21,7 @@ variable scheduled_jobs {
       pubsub_target = optional(object({
         topic_name = optional(string)
         data       = optional(string)
-        attributes = optional(string)
+        attributes = optional(map(string))
       }))
 
       retry_config = optional(object({
