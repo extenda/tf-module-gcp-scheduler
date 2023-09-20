@@ -20,7 +20,8 @@
 
 | Name | Description |
 |------|-------------|
-| google\_app\_engine\_application | Id of App Engine application |
+| google\_app\_engine\_application\_id | Id of App Engine application |
+| app\_engine\_default\_service\_account\_email | The email address of the default App Engine service account |
 
 ## Usage
 
@@ -98,7 +99,7 @@ scheduled_jobs = [
           }
         },
         {
-          name = "my-test-job-2
+          name = "my-test-job-2"
           ...
         }
       ]
