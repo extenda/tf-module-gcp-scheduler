@@ -1,6 +1,14 @@
+data "google_app_engine_default_service_account" "default" {
+  project = var.project_id
+}
+
 resource "google_app_engine_application" "app" {
+  # Only create if the default service account email is empty. 
+  # This logic assumes that if the default service account exists, so does the App Engine application.
+  count       = data.google_app_engine_default_service_account.default.email != "" ? 0 : 1
   project     = var.project_id
   location_id = var.app_engine_region
+
   lifecycle {
     ignore_changes = [
       location_id
@@ -9,7 +17,7 @@ resource "google_app_engine_application" "app" {
 }
 
 resource "google_cloud_scheduler_job" "job" {
-  for_each = google_app_engine_application.app.id != "" ? { for i in toset(var.scheduled_jobs) : i.name => i } : {}
+  for_each = data.google_app_engine_default_service_account.default.email != "" ? { for i in toset(var.scheduled_jobs) : i.name => i } : {}
 
   name             = each.value.name
   project          = var.project_id
@@ -63,5 +71,5 @@ resource "google_cloud_scheduler_job" "job" {
       }
     }
   }
-  depends_on = [google_app_engine_application.app]
+  depends_on = [data.google_app_engine_default_service_account.default, google_app_engine_application.app]
 }
