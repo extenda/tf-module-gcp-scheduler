@@ -71,5 +71,5 @@ resource "google_cloud_scheduler_job" "job" {
       }
     }
   }
-  depends_on = [data.google_app_engine_default_service_account.default, google_app_engine_application.app]
+  depends_on = [google_app_engine_application.app]
 }
