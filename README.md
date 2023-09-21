@@ -21,6 +21,7 @@
 | Name | Description |
 |------|-------------|
 | app\_engine\_default\_service\_account\_email | The email address of the default App Engine service account |
+| google\_app\_engine\_application\_id | Id of App Engine application |
 
 ## Usage
 
